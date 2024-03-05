@@ -1,15 +1,16 @@
 package br.clayder.finansys.invoice.domain.category
 
+import br.clayder.finansys.invoice.domain.AggregateRoot
 import java.time.Instant
 import java.util.UUID
 
 class Category private constructor(
     val name: String,
     val description: String,
-    val isActive: Boolean
-) {
+    val isActive: Boolean,
+    override val id: CategoryID = CategoryID.unique(),
+) : AggregateRoot<CategoryID>(id){
 
-    val id: String = UUID.randomUUID().toString()
     val createdAt: Instant
     val updatedAt: Instant
     val deletedAt: Instant? = null
@@ -25,9 +26,8 @@ class Category private constructor(
             name: String,
             description: String,
             isActive: Boolean = true
-        ): Category {
-
-            return Category(
+        ): Category  = run {
+            Category(
                 description = description,
                 name = name,
                 isActive = isActive
